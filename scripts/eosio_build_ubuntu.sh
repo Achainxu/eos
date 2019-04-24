@@ -218,17 +218,6 @@ if $PIN_COMPILER; then
    fi
 
    cd $SRC_LOCATION
-   printf "Checking zlib library installation...\\n"
-   if [ ! -d $OPT_LOCATION/zlib || $FORCE_BUILD ]; then
-      printf "Installing zlib...\\n"
-      curl -LO https://www.zlib.net/zlib-1.2.11.tar.gz && tar -xf zlib-1.2.11.tar.gz \
-      && cd zlib-1.2.11 && mkdir build && cd build \
-      && ../configure --prefix=$OPT_LOCATION/zlib \
-      && make -j"${JOBS}" install \
-      || exit -1
-   fi
-
-   cd $SRC_LOCATION
    export PATH=$OPT_LOCATION/clang8/bin:$PATH
    printf "Checking Boost library (${BOOST_VERSION}) installation...\\n"
    BOOSTVERSION=$( grep "#define BOOST_VERSION" "$BOOST_ROOT/include/boost/version.hpp" 2>/dev/null | tail -1 | tr -s ' ' | cut -d\  -f3 )
@@ -238,7 +227,7 @@ if $PIN_COMPILER; then
       && tar -xjf boost_$BOOST_VERSION.tar.bz2 \
       && cd $BOOST_ROOT \
       && ./bootstrap.sh --prefix=$BOOST_ROOT \
-      && ./b2 toolset=clang cxxflags="-stdlib=libc++ -D__STRICT_ANSI__ -nostdinc++ -I${CLANG8_ROOT}/include/c++/v1" linkflags="-stdlib=libc++" link=static threading=multi --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -q -j"${JOBS}" -sZLIB_LIBRARY_PATH="${OPT_LOCATION}/zlib/lib" -sZLIB_INCLUDE="${OPT_LOCATION}/zlib/include" -sZLIB_SOURCE="${SRC_LOCATION}/zlib-1.2.11" install \
+      && ./b2 toolset=clang cxxflags="-stdlib=libc++ -D__STRICT_ANSI__ -nostdinc++ -I${CLANG8_ROOT}/include/c++/v1" linkflags="-stdlib=libc++" link=static threading=multi --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -q -j"${JOBS}"  install \
       && cd .. \
       && rm -f boost_$BOOST_VERSION.tar.bz2 \
       && rm -rf $BOOST_LINK_LOCATION \
