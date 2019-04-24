@@ -70,7 +70,7 @@ steps:
 
   - command: | # Ubuntu 18.04 Build
         echo "+++ :hammer: Building"
-        ./scripts/eosio_build.sh -y -P -f
+        ./scripts/eosio_build.sh -y -P -f -m
         echo "--- :compression: Compressing build directory"
         tar -pczf build.tar.gz build
         if [[ ! -f build.tar.gz ]]; then echo 'ERROR: No build.tar.gz artifact found!' && exit 1; fi
